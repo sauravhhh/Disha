@@ -140,12 +140,8 @@
   .well.on .well-shine{background:rgba(255,255,255,.13)}
   /* Butterflies */
   .bfly-layer{position:fixed;inset:0;pointer-events:none;z-index:80;overflow:hidden}
-  .bfly{position:absolute;left:-60px;display:block;opacity:0;animation-name:flyacross;animation-timing-function:linear;animation-fill-mode:forwards}
-  .bfly i{position:absolute;top:0;width:52%;height:100%;background:var(--accent);opacity:.8}
-  .bfly .w-l{left:0;border-radius:90% 15% 90% 15%;transform-origin:100% 50%;animation:flap .26s ease-in-out infinite alternate}
-  .bfly .w-r{right:0;border-radius:15% 90% 15% 90%;transform-origin:0 50%;animation:flap .26s ease-in-out infinite alternate}
-  @keyframes flap{from{transform:scaleX(.3)}to{transform:scaleX(1)}}
-  @keyframes flyacross{0%{transform:translate(0,0) rotate(-6deg);opacity:0}8%{opacity:1}50%{transform:translate(55vw,-4vh) rotate(4deg)}92%{opacity:1}100%{transform:translate(118vw,2vh) rotate(-4deg);opacity:0}}
+  .bfly{position:absolute;left:0;top:0;display:block;line-height:1;will-change:transform,opacity}
+  .bfly .emoji{display:block;line-height:1;will-change:transform;filter:drop-shadow(0 3px 5px rgba(0,0,0,.18))}
   /* Coffee */
   .coffee{text-align:center}
   .coffee .sub{max-width:440px;margin-left:auto;margin-right:auto}
@@ -153,6 +149,31 @@
   .coffee-yes{display:none;margin-top:6px}
   .coffee-yes.show{display:block}
   .serif-note{font-family:"DM Serif Display",serif;font-style:italic;font-size:21px;line-height:1.45;color:var(--ink)}
+  /* ---------- Storybook ---------- */
+  .book{margin-top:26px;background:var(--surface);border:1px solid var(--line);border-radius:8px 16px 16px 8px;box-shadow:0 18px 44px rgba(23,23,19,.10),inset 7px 0 14px rgba(23,23,19,.05);overflow:hidden;position:relative}
+  .book-progress{height:3px;background:var(--surface2)}
+  .book-progress i{display:block;height:100%;width:20%;background:var(--accent);transition:width .5s ease}
+  .book-pages{min-height:560px}
+  @media(max-width:520px){.book-pages{min-height:520px}}
+  .page{display:none;margin:0;background:transparent;border:none;border-radius:0;padding:40px 30px 34px;overflow:visible}
+  .page.active{display:block}
+  .book[data-dir="r"] .page.active{animation:pageR .55s ease both}
+  .book[data-dir="l"] .page.active{animation:pageL .55s ease both}
+  @keyframes pageR{from{opacity:0;transform:perspective(1100px) rotateY(6deg) translateX(24px);transform-origin:left center}to{opacity:1;transform:none}}
+  @keyframes pageL{from{opacity:0;transform:perspective(1100px) rotateY(-6deg) translateX(-24px);transform-origin:right center}to{opacity:1;transform:none}}
+  .book.live .page.active .rv{opacity:0;animation:riseIn .6s ease forwards;animation-delay:calc(150ms + var(--i,0)*180ms)}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .book .hero{padding:10px 0 0}
+  .book footer{padding-top:30px}
+  .book-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-top:1px solid var(--line);background:var(--surface)}
+  .nav-btn{min-height:44px;padding:0 16px;font-size:14.5px}
+  .nav-btn:disabled{opacity:.35;cursor:default}
+  .dots-wrap{text-align:center}
+  .dots{display:flex;gap:7px;justify-content:center;margin-bottom:5px}
+  .dot{width:8px;height:8px;min-height:8px;border-radius:50%;border:none;background:var(--line);padding:0;cursor:pointer}
+  .dot.on{background:var(--accent)}
+  .page-count{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  @media (prefers-reduced-motion: reduce){.book[data-dir="r"] .page.active,.book[data-dir="l"] .page.active{animation:none}.book.live .page.active .rv{animation:none;opacity:1}.book-progress i{transition:none}}
   footer{text-align:center;padding:40px 10px 0;color:var(--muted)}
   footer .sig{font-family:"DM Serif Display",serif;font-style:italic;font-size:26px;color:var(--ink);line-height:1.2}
   .toast{position:fixed;left:50%;transform:translateX(-50%) translateY(20px);bottom:20px;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:999px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:70;max-width:92vw;text-align:center}
@@ -191,120 +212,40 @@
 </div>
 
 <div class="wrap">
+ <div class="book" id="book">
+  <div class="book-progress" aria-hidden="true"><i id="bookProgress"></i></div>
+  <div class="book-pages">
 
-  <header class="hero">
-    <div class="rule"></div>
-    <h1>For <em>Disha</em></h1>
-    <p class="lede">You said <strong>skip the small talk</strong>. So I did — and made you this instead.</p>
-    <a class="scroll-hint" href="#music" aria-label="Scroll down">↓</a>
-  </header>
-
-  <section class="plain">
-    <p class="quote">“Just looking for someone to share good music, and deep conversations with.”</p>
-    <p class="sub" style="margin:0">That line stayed with me. So here is my reply, one interest at a time — quietly, and meant.</p>
+  <section class="page cover active" aria-label="Cover">
+    <header class="hero">
+      <div class="rule rv" style="--i:0"></div>
+      <p class="kicker rv" style="--i:1">A short story, of sorts</p>
+      <h1 class="rv" style="--i:2">For <em>Disha</em></h1>
+      <p class="lede rv" style="--i:3">You said <strong>skip the small talk</strong>. So I did — and made you this instead. A few pages, one thing at a time.</p>
+      <div class="rv" style="--i:4;margin-top:32px"><button class="btn btn-accent" onclick="nextPage()">Begin the story</button></div>
+    </header>
   </section>
 
-  <!-- MUSIC -->
-  <section id="music">
-    <p class="kicker">01 · Music</p>
-    <h2>Your favourite song, <em>right now</em></h2>
-    <p class="sub">Your one condition. Nothing else begins until this is answered.</p>
-    <div class="song-row">
-      <input id="songInput" type="text" placeholder="Type a song — any song" aria-label="Your favourite song right now" />
-      <button class="btn btn-accent" onclick="revealSong()">That’s the one</button>
-    </div>
-    <div class="song-result" id="songResult">
-      <div class="vinyl"><div class="disc"></div><div><b id="songName"></b><br><span style="color:var(--muted)">Good. We are officially past small talk. Your turn to ask me mine.</span></div></div>
-    </div>
-    <p style="font-size:13.5px;color:var(--muted);margin:14px 0 0">Mine changes with old songs and quiet evenings. Ask me over coffee, and I will play you the current one.</p>
-  </section>
-
-  <!-- DEEP CONVERSATIONS -->
-  <section>
-    <p class="kicker">02 · Deep conversations</p>
-    <h2>Choose one. <em>Answer honestly.</em></h2>
-    <p class="sub">Pick a card. That is the whole game.</p>
-    <div class="grid">
-      <button class="qcard" onclick="flip(this)"><small>Tap to reveal</small><p>What’s a song that feels like a memory?</p><p class="hint">Tap again to put it back</p></button>
-      <button class="qcard" onclick="flip(this)"><small>Tap to reveal</small><p>What’s something you believe that most people don’t?</p><p class="hint">Tap again to put it back</p></button>
-      <button class="qcard" onclick="flip(this)"><small>Tap to reveal</small><p>If tonight had no plans, where would you actually want to be?</p><p class="hint">Tap again to put it back</p></button>
-      <button class="qcard" onclick="flip(this)"><small>Tap to reveal</small><p>What’s a small moment that made you unexpectedly happy recently?</p><p class="hint">Tap again to put it back</p></button>
-    </div>
-  </section>
-
-  <!-- TRAVEL -->
-  <section>
-    <p class="kicker">03 · Travel</p>
-    <h2>Where to, <em>when we go?</em></h2>
-    <p class="sub">You love to travel. Pick a direction — I will match it.</p>
-    <div class="chips">
-      <button class="chip" onclick="pick(this,'travelNote','Hills, slow mornings, and a long drive with good music. I’m in.')">Hills &amp; slow mornings</button>
-      <button class="chip" onclick="pick(this,'travelNote','City lights, quiet cafés, and nowhere to be in a hurry. A fine choice.')">City lights &amp; cafés</button>
-      <button class="chip" onclick="pick(this,'travelNote','Somewhere by the water, no itinerary, just time. Noted.')">Somewhere by the water</button>
-      <button class="chip" onclick="pick(this,'travelNote','A road trip with no fixed plan. The best kind, in my experience.')">A spontaneous road trip</button>
-    </div>
-    <div class="note" id="travelNote"></div>
-  </section>
-
-  <!-- NETFLIX -->
-  <section>
-    <p class="kicker">04 · Netflix</p>
-    <h2>For the <em>staying-in</em> evenings</h2>
-    <p class="sub">Not every evening needs to go out. What are we watching?</p>
-    <div class="chips">
-      <button class="chip" onclick="pick(this,'netflixNote','A thriller with a twist at the end — the kind you keep thinking about the next day.')">A thriller with a twist</button>
-      <button class="chip" onclick="pick(this,'netflixNote','Something light and funny, where nobody has to think too hard.')">An easy comedy</button>
-      <button class="chip" onclick="pick(this,'netflixNote','A slow, beautiful drama. Conversation afterwards is not optional.')">A slow drama</button>
-      <button class="chip" onclick="pick(this,'netflixNote','You choose. I’ll bring the snacks, pretend I’m not invested, then get fully invested.')">You pick, I’ll watch</button>
-    </div>
-    <div class="note" id="netflixNote"></div>
-  </section>
-
-  <!-- POETRY -->
-  <section>
-    <p class="kicker">05 · Poetry</p>
-    <h2>A few lines, <em>for the poet in you</em></h2>
-    <div class="poem" id="poem">
-      <p>Some people you meet in passing,<br>some you meet and the evening<br>refuses to end on time.</p>
-      <p class="more">You were the second kind —<br>a pause in an ordinary day,<br>and somehow, right on time.</p>
-    </div>
-    <div class="center" style="margin-top:14px"><button class="btn btn-ghost" onclick="togglePoem(this)">Read the rest</button></div>
-  </section>
-
-  <!-- WINE -->
-  <section>
-    <p class="kicker">06 · Wine</p>
-    <h2>An evening, <em>done well</em></h2>
-    <p class="sub">A good bottle, an unhurried evening, and conversation that goes somewhere. Choose the mood.</p>
-    <div class="chips">
-      <button class="chip" onclick="toast('A quiet toast, then. To good music and better company.')">A quiet toast</button>
-      <button class="chip" onclick="toast('A long evening it is. No clock-watching.')">A long evening</button>
-    </div>
-  </section>
-
-  <!-- WRITING -->
-  <section>
-    <p class="kicker">07 · Writing</p>
-    <h2>Your turn to <em>write something</em></h2>
-    <p class="sub">You write, so here is a blank page. One line is enough — a thought, a lyric, anything honest.</p>
-    <textarea id="writeBox" placeholder="Start with one honest line…"></textarea>
-    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn" onclick="saveLine()">Keep this line</button>
-      <span id="writeMsg" style="align-self:center;color:var(--muted);font-size:14px"></span>
-    </div>
+  <section class="page" aria-label="Prologue">
+    <p class="kicker rv" style="--i:0">Prologue · Her words</p>
+    <h2 class="rv" style="--i:1">Where it <em>began</em></h2>
+    <p class="quote rv" style="--i:2">“Just looking for someone to share good music, and deep conversations with.”</p>
+    <p class="sub rv" style="--i:3;margin:0">That line stayed with me. So here is my reply — quietly, and meant.</p>
   </section>
 
   <!-- MANIFESTATION -->
-  <section>
-    <p class="kicker">08 · Manifestation</p>
-    <h2>Light a candle. <em>Make a wish.</em></h2>
-    <p class="sub">Tap the candle first — some things should be done properly. Then write the wish, and send it off.</p>
+  <section class="page" id="manifestation" aria-label="Chapter one, manifestation">
+    <p class="kicker rv" style="--i:0">Chapter One · Manifestation</p>
+    <h2 class="rv" style="--i:1">Light a candle. <em>Make a wish.</em></h2>
+    <p class="sub rv" style="--i:2">Tap the candle first — some things should be done properly. Then write the wish, and send it off.</p>
+    <div class="rv" style="--i:3">
     <button class="candle" id="candle" aria-pressed="false" aria-label="Tap to light the candle" onclick="toggleCandle()">
       <span class="flame"></span><span class="wick"></span><span class="wax"></span><span class="candle-base"></span>
     </button>
-    <p class="center" id="candleMsg" style="color:var(--muted);font-size:14px;margin:8px 0 18px">Unlit, for now.</p>
-    <textarea id="wishBox" placeholder="Write the wish here — say it like you mean it…"></textarea>
-    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+    </div>
+    <p class="center rv" style="--i:4;color:var(--muted);font-size:14px;margin:8px 0 18px" id="candleMsg">Unlit, for now.</p>
+    <textarea class="rv" style="--i:5" id="wishBox" placeholder="Write the wish here — say it like you mean it…"></textarea>
+    <div class="rv" style="--i:6;margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
       <button class="btn btn-accent" onclick="sendWish()">Send it off</button>
       <span id="wishMsg" style="color:var(--muted);font-size:14px"></span>
     </div>
@@ -312,47 +253,52 @@
   </section>
 
   <!-- WISHING WELL -->
-  <section>
-    <p class="kicker">09 · The wishing well</p>
-    <h2>Look into <em>the well</em></h2>
-    <p class="sub">Still water, showing nothing — until you lean in. Tap the well, and see who it shows you.</p>
+  <section class="page" aria-label="Chapter two, the wishing well">
+    <p class="kicker rv" style="--i:0">Chapter Two · The Wishing Well</p>
+    <h2 class="rv" style="--i:1">Look into <em>the well</em></h2>
+    <p class="sub rv" style="--i:2">Still water, showing nothing — until you lean in. Tap the well, and see who it shows you.</p>
+    <div class="rv" style="--i:3">
     <button class="well" id="well" aria-label="Tap the wishing well to see your reflection" onclick="toggleWell()">
       <video id="wellVideo" autoplay playsinline muted></video>
       <span class="well-shine"></span>
     </button>
-    <p class="center" id="wellMsg" style="color:var(--muted);font-size:14px;margin:14px 0 0">Tap the well to look in.</p>
-  </section>
-
-  <!-- MIDNIGHT DRIVE -->
-  <section class="night" id="nightCard">
-    <p class="kicker">10 · Midnight drives</p>
-    <h2>The one you listed <em style="color:#D8B36A">as a con</em></h2>
-    <p class="sub">It isn’t one. Not to me.</p>
-    <div class="road"><div class="moon"></div><div class="car-line">Midnight · Open road</div></div>
-    <button class="btn btn-accent" onclick="toggleLights(this)">Turn on the headlights</button>
-    <span id="driveMsg" style="margin-left:10px;font-size:14px;opacity:.8"></span>
+    </div>
+    <p class="center rv" style="--i:4;color:var(--muted);font-size:14px;margin:14px 0 0" id="wellMsg">Tap the well to look in.</p>
   </section>
 
   <!-- COFFEE -->
-  <section class="coffee">
-    <p class="kicker">Finally · Coffee</p>
-    <h2>So — <em>coffee?</em></h2>
-    <p class="sub">Your words, not mine: let’s grab a coffee and see if we vibe. No rush, good music on the way there.</p>
+  <section class="page coffee" aria-label="The last chapter, coffee">
+    <p class="kicker rv" style="--i:0">The Last Chapter · Coffee</p>
+    <h2 class="rv" style="--i:1">So — <em>coffee?</em></h2>
+    <p class="sub rv" style="--i:2">Your words, not mine: let’s grab a coffee and see if we vibe. No rush, good music on the way there.</p>
+    <div class="rv" style="--i:3">
     <div class="arena" id="coffeeArena">
       <button class="btn btn-accent yes-btn" onclick="sayYes()">Yes</button>
       <button class="btn btn-ghost no-btn" id="coffeeNo" aria-label="No">No</button>
     </div>
-    <p class="dodge-note" id="coffeeDodgeNote"></p>
+    </div>
+    <p class="dodge-note rv" style="--i:4" id="coffeeDodgeNote"></p>
     <div class="coffee-yes" id="coffeeYes">
       <p class="serif-note">Good. You pick the place and the day.<br>I will handle the rest.</p>
       <p style="color:var(--muted);font-size:14px;margin:6px 0 0">Tell Saurabh on Tinder and fix a day. That’s all you have to do.</p>
     </div>
+    <footer class="rv" style="--i:5">
+      <p style="margin:0 0 8px">Made for Disha, with no small talk involved.</p>
+      <p class="sig">— Saurabh</p>
+      <p style="margin:12px 0 0;font-family:'DM Serif Display',serif;font-style:italic;font-size:17px;color:var(--muted)">The End</p>
+    </footer>
   </section>
 
-  <footer>
-    <p style="margin:0 0 8px">Made for Disha, with no small talk involved.</p>
-    <p class="sig">— Saurabh</p>
-  </footer>
+  </div><!-- /book-pages -->
+  <nav class="book-nav" aria-label="Story pages">
+    <button class="btn btn-ghost nav-btn" id="prevBtn" onclick="prevPage()">← Previous</button>
+    <div class="dots-wrap">
+      <div class="dots" id="pageDots"></div>
+      <div class="page-count" id="pageCount">Page 1 of 5</div>
+    </div>
+    <button class="btn btn-ghost nav-btn" id="nextBtn" onclick="nextPage()">Next →</button>
+  </nav>
+ </div><!-- /book -->
 </div>
 
 <div class="toast" id="toast"></div>
@@ -373,6 +319,7 @@ document.getElementById('giftBox').addEventListener('click',function(){
 function acceptCoffee(){
   document.getElementById('intro').classList.add('done');
   document.body.classList.remove('locked');
+  document.getElementById('book').classList.add('live');
   var cy=document.getElementById('coffeeYes'); if(cy)cy.classList.add('show');
   setTimeout(function(){document.getElementById('intro').style.display='none';},650);
   releaseButterflies();
@@ -402,38 +349,52 @@ function makeDodgy(btnId,noteId){
 makeDodgy('introNo','introDodgeNote');
 makeDodgy('coffeeNo','coffeeDodgeNote');
 
-/* Music */
-function revealSong(){var v=document.getElementById('songInput').value.trim();if(!v){showToast('Type a song first — that was the deal');document.getElementById('songInput').focus();return;}document.getElementById('songName').textContent='“'+v+'”';document.getElementById('songResult').classList.add('show');}
-document.getElementById('songInput').addEventListener('keydown',function(e){if(e.key==='Enter')revealSong();});
-
-/* Cards & chips */
-function flip(el){el.classList.toggle('revealed');}
-function pick(btn,noteId,msg){var parent=btn.parentElement;parent.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');var n=document.getElementById(noteId);n.textContent=msg;n.classList.add('show');}
-
-/* Poetry */
-function togglePoem(btn){var p=document.getElementById('poem');var open=p.classList.toggle('open');btn.textContent=open?'Put it away':'Read the rest';}
-
-/* Writing */
-function saveLine(){var v=document.getElementById('writeBox').value.trim();var m=document.getElementById('writeMsg');if(!v){m.textContent='One line — that’s all it takes.';return;}m.textContent='Kept. Now that deserves to be shared back.';showToast('Line kept — send it to Saurabh');}
-
-/* Midnight drive */
-function toggleLights(btn){var c=document.getElementById('nightCard');var lit=c.classList.toggle('lit');btn.textContent=lit?'Headlights on — let’s go':'Turn on the headlights';document.getElementById('driveMsg').textContent=lit?'Playlist on, windows down, the city asleep.':' ';if(lit)showToast('Midnight drive: approved');}
-
-/* Butterflies — released whenever she says yes */
+/* Butterflies — real 🦋, released whenever she says yes.
+   Flight model: wings beat in short bursts (the body bobs up with each
+   burst), then a glide with wings held open; the path wanders up and
+   down instead of crossing in a straight line. */
 function releaseButterflies(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   var layer=document.getElementById('bflyLayer');
   if(!layer){layer=document.createElement('div');layer.id='bflyLayer';layer.className='bfly-layer';document.body.appendChild(layer);}
-  for(var i=0;i<9;i++){
-    var b=document.createElement('span');b.className='bfly';
-    var s=15+Math.random()*15;
-    b.style.width=s+'px';b.style.height=s+'px';
-    b.style.top=(6+Math.random()*72)+'vh';
-    b.style.animationDuration=(6+Math.random()*5)+'s';
-    b.style.animationDelay=(Math.random()*1.6)+'s';
-    b.innerHTML='<i class="w-l"></i><i class="w-r"></i>';
-    layer.appendChild(b);
-    (function(el){setTimeout(function(){el.remove();},15000);})(b);
+  var W=window.innerWidth,H=window.innerHeight;
+  for(var i=0;i<8;i++){
+    (function(){
+      var b=document.createElement('span');b.className='bfly';b.setAttribute('aria-hidden','true');
+      var e=document.createElement('span');e.className='emoji';e.textContent='\uD83E\uDD8B';
+      e.style.fontSize=(26+Math.random()*20)+'px';
+      b.appendChild(e);layer.appendChild(b);
+      var dur=10000+Math.random()*5000;
+      var delay=Math.random()*1800;
+      var baseY=H*(0.08+Math.random()*0.6);
+      var wanderA=26+Math.random()*46;
+      var wanderF=2+Math.random()*2.5;
+      var wanderP=Math.random()*6.283;
+      var burstP=Math.random()*6.283;
+      var flapP=Math.random()*6.283;
+      var t0=null;
+      function frame(ts){
+        if(t0===null)t0=ts;
+        var t=ts-t0-delay;
+        if(t<0){requestAnimationFrame(frame);return;}
+        var p=t/dur;
+        if(p>=1){b.remove();return;}
+        var x=-70+p*(W+140);
+        var burst=0.5+0.5*Math.sin(t*0.0011+burstP);
+        var flapping=burst>0.38;
+        if(flapping)flapP+=0.55;else flapP+=0.06;
+        var bob=flapping?-Math.abs(Math.sin(flapP))*7:Math.sin(flapP)*1.5;
+        var y=baseY+Math.sin(p*wanderF*3.14+wanderP)*wanderA+Math.sin(p*22+wanderP)*7+bob;
+        var slope=Math.cos(p*wanderF*3.14+wanderP)*wanderA*0.35;
+        var rot=Math.max(-26,Math.min(26,slope));
+        var sx=flapping?(0.45+0.55*Math.abs(Math.sin(flapP))):(0.92+0.08*Math.sin(flapP));
+        b.style.opacity=Math.min(1,p*7,(1-p)*7);
+        b.style.transform='translate('+x+'px,'+y+'px) rotate('+rot+'deg)';
+        e.style.transform='scaleX('+sx+')';
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })();
   }
 }
 
@@ -491,6 +452,54 @@ function toggleWell(){
 
 /* Final coffee */
 function sayYes(){releaseButterflies();document.getElementById('coffeeYes').classList.add('show');showToast('Coffee: confirmed');document.getElementById('coffeeYes').scrollIntoView({behavior:'smooth',block:'center'});}
+
+/* Storybook — one page at a time, elements reveal in sequence */
+var bookPages=Array.prototype.slice.call(document.querySelectorAll('.page'));
+var curPage=0;
+var dotsWrap=document.getElementById('pageDots');
+bookPages.forEach(function(_,i){
+  var d=document.createElement('button');
+  d.className='dot'+(i===0?' on':'');
+  d.setAttribute('aria-label','Go to page '+(i+1));
+  d.addEventListener('click',function(){goToPage(i,i>curPage?1:-1);});
+  dotsWrap.appendChild(d);
+});
+function renderBook(){
+  bookPages.forEach(function(p,i){p.classList.toggle('active',i===curPage);});
+  for(var i=0;i<dotsWrap.children.length;i++)dotsWrap.children[i].classList.toggle('on',i===curPage);
+  document.getElementById('pageCount').textContent='Page '+(curPage+1)+' of '+bookPages.length;
+  document.getElementById('bookProgress').style.width=((curPage+1)/bookPages.length*100)+'%';
+  document.getElementById('prevBtn').disabled=curPage===0;
+  document.getElementById('nextBtn').disabled=curPage===bookPages.length-1;
+}
+function goToPage(n,dir){
+  n=Math.max(0,Math.min(bookPages.length-1,n));
+  if(n===curPage){renderBook();return;}
+  var well=document.getElementById('well');
+  if(well&&well.classList.contains('on')&&!bookPages[n].contains(well))toggleWell();
+  curPage=n;
+  document.getElementById('book').setAttribute('data-dir',dir<0?'l':'r');
+  renderBook();
+  document.getElementById('book').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function nextPage(){goToPage(curPage+1,1);}
+function prevPage(){goToPage(curPage-1,-1);}
+renderBook();
+document.addEventListener('keydown',function(e){
+  if(document.body.classList.contains('locked'))return;
+  if(e.key==='ArrowRight')nextPage();
+  if(e.key==='ArrowLeft')prevPage();
+});
+var touchX=null;
+var bookEl=document.getElementById('book');
+bookEl.addEventListener('touchstart',function(e){touchX=e.changedTouches[0].clientX;},{passive:true});
+bookEl.addEventListener('touchend',function(e){
+  if(touchX===null)return;
+  var dx=e.changedTouches[0].clientX-touchX;touchX=null;
+  if(Math.abs(dx)<70)return;
+  if(e.target.closest&&e.target.closest('textarea,input'))return;
+  if(dx<0)nextPage();else prevPage();
+},{passive:true});
 </script>
 </body>
 </html>
