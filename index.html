@@ -289,6 +289,7 @@
     </button>
     </div>
     <p class="center rv" style="--i:5;color:var(--muted);font-size:14px;margin:14px 0 0" id="wellMsg">Tap the well to look in.</p>
+    <div id="wellPlayer" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none"></div>
   </section>
 
   <!-- SONG, plays only here, only when she presses play -->
@@ -534,11 +535,35 @@ function toggleCandle(){
   document.getElementById('candleMsg').textContent=lit?'Lit. Now make the wish, quietly.':'Unlit, for now.';
 }
 
-/* Wishing well, black until tapped, then her picture appears */
+/* Wishing well, black until tapped, then her picture appears.
+   When the picture shows, "Aapki Aankhon Mein Kuch" from Ghar plays
+   (hidden player); when the picture hides again, the song stops. */
+var wellSongOn=false;
+function startWellSong(){
+  if(wellSongOn)return;
+  var wrap=document.getElementById('wellPlayer');
+  if(!wrap)return;
+  var f=document.createElement('iframe');
+  f.src='https://www.youtube.com/embed/qn3WEdLtp-g?autoplay=1&loop=1&playlist=qn3WEdLtp-g&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0';
+  f.width='1';f.height='1';
+  f.setAttribute('allow','autoplay; encrypted-media');
+  f.setAttribute('aria-hidden','true');
+  f.setAttribute('tabindex','-1');
+  f.style.border='0';
+  wrap.innerHTML='';wrap.appendChild(f);
+  wellSongOn=true;
+}
+function stopWellSong(){
+  if(!wellSongOn)return;
+  wellSongOn=false;
+  var wrap=document.getElementById('wellPlayer');
+  if(wrap)wrap.innerHTML='';
+}
 function toggleWell(){
   var well=document.getElementById('well');
   var msg=document.getElementById('wellMsg');
   var on=well.classList.toggle('on');
+  if(on)startWellSong();else stopWellSong();
   msg.textContent=on?'There you are. That is who the wish is for. Now wish well.':'The well is dark again. The wish stays.';
 }
 
