@@ -223,6 +223,35 @@
   footer .sig{font-family:"DM Serif Display",serif;font-style:italic;font-size:26px;color:var(--ink);line-height:1.2}
   .toast{position:fixed;left:50%;transform:translateX(-50%) translateY(20px);bottom:20px;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:999px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:70;max-width:92vw;text-align:center}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  img{max-width:100%}
+  /* ---------- Phones: the whole book fits the screen, nothing cut off ---------- */
+  @media (max-width:560px){
+    body{overflow-x:hidden}
+    .wrap{padding:0 12px 40px}
+    .book{margin-top:16px;border-radius:8px 12px 12px 8px}
+    .page{padding:30px 20px 26px}
+    .song-page{padding-top:22px;padding-bottom:16px}
+    h1{font-size:clamp(42px,13vw,76px)}
+    h2{font-size:clamp(24px,6.8vw,31px);line-height:1.18}
+    .sub{font-size:15px}
+    .quote{font-size:19px;padding-left:14px}
+    .hero p.lede{font-size:16.5px}
+    .book .hero{padding-top:4px}
+    .book footer{padding-top:22px}
+    .btn{padding:0 18px}
+    .book-nav{padding:10px 12px;gap:6px}
+    .nav-btn{padding:0 10px;font-size:13.5px;white-space:nowrap}
+    .dots{gap:5px;margin-bottom:2px}
+    .dot{width:26px;height:26px;min-height:26px;padding:9px;background-clip:content-box}
+    .page-count{font-size:10px;letter-spacing:.1em}
+    .arena{height:150px}
+    .arena .btn{top:44px;width:min(124px,42%)}
+    .arena .yes-btn{left:4%}
+    .arena .no-btn{left:54%}
+    .well{width:min(196px,60vw);height:auto}
+    .serif-note{font-size:19px}
+    .intro{padding:18px}
+  }
 </style>
 </head>
 <body class="locked">
@@ -284,10 +313,6 @@
     </button>
     </div>
     <p class="center rv" style="--i:4;color:var(--muted);font-size:14px;margin:8px 0 18px" id="candleMsg">Unlit, for now.</p>
-    <div style="text-align:center;display:none" id="blowWrap">
-      <button class="btn btn-ghost" id="blowBtn" onclick="startBlow()">Blow it out</button>
-      <p style="color:var(--muted);font-size:14px;margin:10px 0 0;min-height:20px" id="blowMsg"></p>
-    </div>
   </section>
 
   <!-- WISHING WELL -->
@@ -505,77 +530,6 @@ function toggleCandle(){
   var lit=c.classList.toggle('lit');
   c.setAttribute('aria-pressed',lit?'true':'false');
   document.getElementById('candleMsg').textContent=lit?'Lit. Now make the wish, quietly.':'Unlit, for now.';
-  if(!lit)stopBlow();
-  var m=document.getElementById('blowMsg');if(m)m.textContent='';
-  updateBlowUI();
-}
-
-/* Blow the candle out with the microphone. Tapping "Blow it out"
-   asks for mic permission, then listens with the Web Audio API.
-   A blow is a loud rush of air: when the level stays above a clear
-   threshold for a few frames in a row, the flame goes out and the
-   microphone stops. If permission is denied, a quiet note says so
-   and the candle stays lit. */
-var blowCtx=null,blowStream=null,blowRAF=null,blowActive=false;
-function updateBlowUI(){
-  var c=document.getElementById('candle');
-  var wrap=document.getElementById('blowWrap');
-  if(wrap)wrap.style.display=(c&&c.classList.contains('lit'))?'block':'none';
-  if(typeof fitBook==='function')fitBook();
-}
-function stopBlow(){
-  blowActive=false;
-  if(blowRAF)cancelAnimationFrame(blowRAF);
-  blowRAF=null;
-  if(blowStream){blowStream.getTracks().forEach(function(t){t.stop();});blowStream=null;}
-  if(blowCtx){try{var p=blowCtx.close();if(p&&p.catch)p.catch(function(){});}catch(e){}blowCtx=null;}
-  var b=document.getElementById('blowBtn');
-  if(b){b.disabled=false;b.textContent='Blow it out';}
-}
-function blowOutCandle(){
-  stopBlow();
-  var c=document.getElementById('candle');
-  if(c){c.classList.remove('lit');c.setAttribute('aria-pressed','false');}
-  document.getElementById('candleMsg').textContent='Blown out. The wish is on its way.';
-  var m=document.getElementById('blowMsg');if(m)m.textContent='';
-  updateBlowUI();
-}
-function startBlow(){
-  if(blowActive)return;
-  var msg=document.getElementById('blowMsg');
-  var btn=document.getElementById('blowBtn');
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
-    if(msg)msg.textContent='This browser can’t use the microphone. The candle stays lit.';
-    return;
-  }
-  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
-    blowStream=stream;
-    var AC=window.AudioContext||window.webkitAudioContext;
-    blowCtx=new AC();
-    if(blowCtx.state==='suspended')blowCtx.resume();
-    var src=blowCtx.createMediaStreamSource(stream);
-    var an=blowCtx.createAnalyser();
-    an.fftSize=2048;
-    src.connect(an);
-    var data=new Uint8Array(an.fftSize);
-    blowActive=true;
-    if(btn){btn.disabled=true;btn.textContent='Listening…';}
-    if(msg)msg.textContent='Listening. Blow into the microphone.';
-    var hot=0;
-    function tick(){
-      if(!blowActive)return;
-      an.getByteTimeDomainData(data);
-      var sum=0;
-      for(var i=0;i<data.length;i++){var v=(data[i]-128)/128;sum+=v*v;}
-      var rms=Math.sqrt(sum/data.length);
-      if(rms>0.30)hot++;else hot=0;
-      if(hot>=4){blowOutCandle();return;}
-      blowRAF=requestAnimationFrame(tick);
-    }
-    tick();
-  }).catch(function(){
-    if(msg)msg.textContent='No microphone, that’s alright. The candle stays lit.';
-  });
 }
 
 /* Wishing well, black until tapped, then her picture appears.
@@ -587,7 +541,7 @@ function startWellSong(){
   var wrap=document.getElementById('wellPlayer');
   if(!wrap)return;
   var f=document.createElement('iframe');
-  f.src='https://www.youtube.com/embed/qn3WEdLtp-g?autoplay=1&loop=1&playlist=qn3WEdLtp-g&start=29&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0';
+  f.src='https://www.youtube.com/embed/qn3WEdLtp-g?autoplay=1&loop=1&playlist=qn3WEdLtp-g&start=25&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0';
   f.width='1';f.height='1';
   f.setAttribute('allow','autoplay; encrypted-media');
   f.setAttribute('aria-hidden','true');
@@ -645,7 +599,6 @@ function goToPage(n,dir){
   var well=document.getElementById('well');
   if(well&&well.classList.contains('on')&&!bookPages[n].contains(well))toggleWell();
   if(songPlaying&&!bookPages[n].contains(document.getElementById('songPlayer')))stopSong();
-  if(blowActive&&!bookPages[n].contains(document.getElementById('candle')))stopBlow();
   curPage=n;
   document.getElementById('book').setAttribute('data-dir',dir<0?'l':'r');
   renderBook();
@@ -665,9 +618,22 @@ function fitBook(){
   var ref=document.getElementById('manifestation');
   if(!ref)ref=bookPages[0];
   bp.style.height='auto';bp.style.minHeight='0px';
-  ref.style.display='block';ref.style.visibility='hidden';ref.style.height='auto';
-  var h=ref.offsetHeight;
-  ref.style.display='';ref.style.visibility='';ref.style.height='';
+  function measure(p){
+    p.style.display='block';p.style.visibility='hidden';p.style.height='auto';
+    var ph=p.offsetHeight;
+    p.style.display='';p.style.visibility='';p.style.height='';
+    return ph;
+  }
+  var h=measure(ref);
+  /* On phones, pages still share one height, but it grows to fit the
+     tallest page's content so nothing — including the last page's
+     heading — is ever clipped. */
+  if(window.innerWidth<=560){
+    for(var i=0;i<bookPages.length;i++){
+      var ph=measure(bookPages[i]);
+      if(ph>h)h=ph;
+    }
+  }
   if(h){bp.style.height=h+'px';bp.style.minHeight=h+'px';}
 }
 fitBook();
