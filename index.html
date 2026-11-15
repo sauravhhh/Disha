@@ -235,7 +235,6 @@
     <div class="stage" id="startStage">
       <p class="kicker">Before we begin</p>
       <h2>Shall we start?</h2>
-      <p class="sub">A few pages, one thing at a time.</p>
       <button class="btn btn-accent" onclick="startStory()">Yes, let’s start</button>
     </div>
 
@@ -252,7 +251,7 @@
       <div class="rule rv" style="--i:0"></div>
       <p class="kicker rv" style="--i:1">A short story, of sorts</p>
       <h1 class="rv" style="--i:2">For <em>You</em></h1>
-      <p class="lede rv" style="--i:3">You said <strong>skip the small talk</strong>. So I did, and made you this instead. A few pages, one thing at a time.</p>
+      <p class="lede rv" style="--i:3">You said <strong>skip the small talk</strong>. So I did, and made you this instead.</p>
       <div class="rv" style="--i:4;margin-top:32px"><button class="btn btn-accent" onclick="nextPage()">Begin the story</button></div>
     </header>
   </section>
@@ -309,7 +308,6 @@
         <span class="play-badge" id="playBadge" aria-hidden="true">▶</span>
       </div>
       <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-      <p class="lyric">“Unko bhi humse mohabbat ho,<br>zaruri toh nahi…”</p>
       <p class="center" style="color:var(--muted);font-size:14px;margin:8px 0 4px" id="songMsg">Tap the record to play.</p>
       <button class="btn btn-accent" id="songBtn" onclick="toggleSong()">▶ Play the song</button>
       <div id="songPlayer" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none"></div>
@@ -317,10 +315,10 @@
   </section>
 
   <!-- COFFEE -->
-  <section class="page coffee" aria-label="The last chapter, coffee">
+  <section class="page coffee" aria-label="The last chapter, WhatsApp">
     <p class="kicker rv" style="--i:0">At Last · One Question First</p>
-    <h2 class="rv" style="--i:1">Coffee <em>with me?</em></h2>
-    <p class="sub rv" style="--i:2">Good music on the way there, a conversation worth having, and no small talk. That is the whole offer.</p>
+    <h2 class="rv" style="--i:1">Connect on <em>WhatsApp?</em></h2>
+    <p class="sub rv" style="--i:2">Good music, deep conversations, and no small talk, just somewhere easier to keep talking. That is the whole offer.</p>
     <div class="rv" style="--i:3">
     <div class="arena" id="coffeeArena">
       <button class="btn btn-accent yes-btn" onclick="sayYes()">Yes</button>
@@ -329,8 +327,8 @@
     </div>
     <p class="dodge-note rv" style="--i:4" id="coffeeDodgeNote"></p>
     <div class="coffee-yes" id="coffeeYes">
-      <p class="serif-note">Good. You pick the place and the day.<br>I will handle the rest.</p>
-      <p style="color:var(--muted);font-size:14px;margin:6px 0 0">Tell me on Tinder and fix a day. That’s all you have to do.</p>
+      <p class="serif-note">Good. Let’s take this<br>to WhatsApp.</p>
+      <p style="color:var(--muted);font-size:14px;margin:6px 0 0">Say yes on Tinder and we will continue there. That’s all you have to do.</p>
     </div>
     <footer class="rv" style="--i:5">
       <p style="margin:0 0 8px">Made for Disha.</p>
@@ -545,7 +543,7 @@ function toggleWell(){
 }
 
 /* Final coffee */
-function sayYes(){releaseButterflies();document.getElementById('coffeeYes').classList.add('show');showToast('Coffee: confirmed');document.getElementById('coffeeYes').scrollIntoView({behavior:'smooth',block:'center'});}
+function sayYes(){releaseButterflies();document.getElementById('coffeeYes').classList.add('show');showToast('WhatsApp it is');document.getElementById('coffeeYes').scrollIntoView({behavior:'smooth',block:'center'});}
 
 /* Storybook, one page at a time, elements reveal in sequence */
 var bookPages=Array.prototype.slice.call(document.querySelectorAll('.page'));
