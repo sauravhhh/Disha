@@ -4,6 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#F5F4F1" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icon-192.png" />
 <link rel="icon" href="data:," />
 <title>For Disha</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,6 +48,16 @@
   .bow-l,.bow-r{position:absolute;bottom:26px;width:44px;height:24px;border:5px solid var(--accent);border-radius:50%;z-index:3}
   .bow-l{right:50%;transform:rotate(-24deg)}
   .bow-r{left:50%;transform:rotate(24deg)}
+  /* Flower knot, sits on top of the bow, opens with the lid */
+  .flower{position:absolute;left:50%;top:-13px;width:46px;height:46px;margin-left:-23px;z-index:4;pointer-events:none}
+  .flower .fp{position:absolute;left:50%;top:50%;width:14px;height:22px;margin:-22px 0 0 -7px;background:#D8B36A;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;transform-origin:50% 100%;box-shadow:inset 0 -3px 5px rgba(138,109,59,.45)}
+  .flower .f1{transform:rotate(0deg)}
+  .flower .f2{transform:rotate(60deg)}
+  .flower .f3{transform:rotate(120deg)}
+  .flower .f4{transform:rotate(180deg)}
+  .flower .f5{transform:rotate(240deg)}
+  .flower .f6{transform:rotate(300deg)}
+  .flower .fc{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;background:#8A6D3B;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(0,0,0,.18),0 1px 3px rgba(0,0,0,.3);z-index:2}
   .gift.open .gift-lid{transform:translate(-14px,-52px) rotate(-12deg);opacity:.92}
   .gift-hint{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:18px}
   /* Confetti, brass and ink tones, burst when the box opens */
@@ -226,7 +239,7 @@
       <h2>Something for you.</h2>
       <p class="sub">No occasion. I came across your words, and I thought they deserved a proper reply.</p>
       <button class="gift" id="giftBox" aria-label="Open the gift box">
-        <span class="gift-lid"><span class="bow-l"></span><span class="bow-r"></span></span>
+        <span class="gift-lid"><span class="bow-l"></span><span class="bow-r"></span><span class="flower" aria-hidden="true"><i class="fp f1"></i><i class="fp f2"></i><i class="fp f3"></i><i class="fp f4"></i><i class="fp f5"></i><i class="fp f6"></i><i class="fc"></i></span></span>
         <span class="gift-body"></span>
       </button>
       <p class="gift-hint">Tap the box to open</p>
@@ -318,7 +331,7 @@
   <!-- COFFEE -->
   <section class="page coffee" aria-label="The last chapter, WhatsApp">
     <p class="kicker rv" style="--i:0">At Last · One Question First</p>
-    <h2 class="rv" style="--i:1">Connect on <em>WhatsApp?</em></h2>
+    <h2 class="rv" style="--i:1">Can I connect with you on <em>WhatsApp?</em></h2>
     <p class="sub rv" style="--i:2">Good music, deep conversations, and no small talk, just somewhere easier to keep talking. That is the whole offer.</p>
     <div class="rv" style="--i:3">
     <div class="arena" id="coffeeArena">
@@ -456,10 +469,18 @@ function startStory(){
   setTimeout(function(){document.getElementById('intro').style.display='none';},650);
 }
 
-/* The No button dodges, Yes never moves */
+/* The No button dodges, Yes never moves.
+   Freeze fix: the dodge is throttled. The button slides with a CSS
+   transition, and sliding under a still pointer re-fires pointerenter
+   again and again, so an unthrottled dodge loops forever and locks
+   the page up. One dodge per 300ms, and no mousedown listener (it
+   doubled every tap into two dodges). */
 function makeDodgy(btnId,noteId){
-  var btn=document.getElementById(btnId), note=document.getElementById(noteId), tries=0;
+  var btn=document.getElementById(btnId), note=document.getElementById(noteId), tries=0, lastDodge=0;
   function dodge(e){
+    var now=Date.now();
+    if(now-lastDodge<300)return;
+    lastDodge=now;
     if(e){e.preventDefault();e.stopPropagation();}
     var arena=btn.parentElement;
     var maxX=Math.max(0,arena.clientWidth-btn.offsetWidth);
@@ -471,7 +492,6 @@ function makeDodgy(btnId,noteId){
     if(tries===5&&note)note.textContent='It is still unavailable. Yes, however, works fine.';
   }
   btn.addEventListener('pointerenter',dodge);
-  btn.addEventListener('mousedown',dodge);
   btn.addEventListener('touchstart',dodge,{passive:false});
   btn.addEventListener('click',dodge);
   btn.addEventListener('focus',function(){dodge();btn.blur();});
@@ -484,6 +504,7 @@ makeDodgy('coffeeNo','coffeeDodgeNote');
    down instead of crossing in a straight line. */
 function releaseButterflies(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  if(document.querySelector('.bfly'))return; /* one flight at a time, never stack loops */
   var layer=document.getElementById('bflyLayer');
   if(!layer){layer=document.createElement('div');layer.id='bflyLayer';layer.className='bfly-layer';document.body.appendChild(layer);}
   var W=window.innerWidth,H=window.innerHeight;
@@ -544,7 +565,7 @@ function startWellSong(){
   var wrap=document.getElementById('wellPlayer');
   if(!wrap)return;
   var f=document.createElement('iframe');
-  f.src='https://www.youtube.com/embed/qn3WEdLtp-g?autoplay=1&loop=1&playlist=qn3WEdLtp-g&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0';
+  f.src='https://www.youtube.com/embed/qn3WEdLtp-g?autoplay=1&loop=1&playlist=qn3WEdLtp-g&start=10&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0';
   f.width='1';f.height='1';
   f.setAttribute('allow','autoplay; encrypted-media');
   f.setAttribute('aria-hidden','true');
@@ -567,8 +588,16 @@ function toggleWell(){
   msg.textContent=on?'There you are. That is who the wish is for. Now wish well.':'The well is dark again. The wish stays.';
 }
 
-/* Final coffee */
-function sayYes(){releaseButterflies();document.getElementById('coffeeYes').classList.add('show');showToast('WhatsApp it is');document.getElementById('coffeeYes').scrollIntoView({behavior:'smooth',block:'center'});}
+/* Final coffee. Guarded: repeated taps used to stack a fresh set of
+   30-second butterfly animation loops every time, which bogged the
+   page down until it felt frozen. */
+var yesSaid=false;
+function sayYes(){
+  document.getElementById('coffeeYes').classList.add('show');
+  showToast('WhatsApp it is');
+  if(!yesSaid){yesSaid=true;releaseButterflies();}
+  document.getElementById('coffeeYes').scrollIntoView({behavior:'smooth',block:'center'});
+}
 
 /* Storybook, one page at a time, elements reveal in sequence */
 var bookPages=Array.prototype.slice.call(document.querySelectorAll('.page'));
@@ -639,6 +668,13 @@ bookEl.addEventListener('touchend',function(e){
   if(e.target.closest&&e.target.closest('textarea,input'))return;
   if(dx<0)nextPage();else prevPage();
 },{passive:true});
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function() {});
+  });
+}
 </script>
 </body>
 </html>
