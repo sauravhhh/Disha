@@ -154,10 +154,6 @@
   .well.on img{display:block}
   .well .well-shine{position:absolute;top:12%;left:16%;width:44%;height:20%;border-radius:50%;background:rgba(255,255,255,.07);transform:rotate(-18deg);pointer-events:none}
   .well.on .well-shine{background:rgba(255,255,255,.13)}
-  /* Butterflies */
-  .bfly-layer{position:fixed;inset:0;pointer-events:none;z-index:80;overflow:hidden}
-  .bfly{position:absolute;left:0;top:0;display:block;line-height:1;will-change:transform,opacity}
-  .bfly .emoji{display:block;line-height:1;will-change:transform;filter:drop-shadow(0 3px 5px rgba(0,0,0,.18))}
   /* Song page, the record is the player — compacted to fit the normal (candle) page height */
   .song-page{text-align:center;padding-top:26px;padding-bottom:20px}
   .song-page .sub{margin-bottom:10px}
@@ -195,6 +191,7 @@
   .coffee .arena{max-width:440px;margin:0 auto}
   .coffee-yes{display:none;margin-top:6px}
   .coffee-yes.show{display:block}
+  .coffee.answered h2,.coffee.answered .sub,.coffee.answered .arena,.coffee.answered .dodge-note{display:none}
   .serif-note{font-family:"DM Serif Display",serif;font-style:italic;font-size:21px;line-height:1.45;color:var(--ink)}
   /* ---------- Storybook ---------- */
   .book{margin-top:26px;background:var(--surface);border:1px solid var(--line);border-radius:8px 16px 16px 8px;box-shadow:0 18px 44px rgba(23,23,19,.10),inset 7px 0 14px rgba(23,23,19,.05);overflow:hidden;position:relative}
@@ -502,56 +499,6 @@ function makeDodgy(btnId,noteId){
 }
 makeDodgy('coffeeNo','coffeeDodgeNote');
 
-/* Butterflies, real 🦋, released whenever she says yes.
-   Flight model: wings beat in short bursts (the body bobs up with each
-   burst), then a glide with wings held open; the path wanders up and
-   down instead of crossing in a straight line. */
-function releaseButterflies(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  if(document.querySelector('.bfly'))return; /* one flight at a time, never stack loops */
-  var layer=document.getElementById('bflyLayer');
-  if(!layer){layer=document.createElement('div');layer.id='bflyLayer';layer.className='bfly-layer';document.body.appendChild(layer);}
-  var W=window.innerWidth,H=window.innerHeight;
-  for(var i=0;i<3;i++){
-    (function(){
-      var b=document.createElement('span');b.className='bfly';b.setAttribute('aria-hidden','true');
-      var e=document.createElement('span');e.className='emoji';e.textContent='\uD83E\uDD8B';
-      e.style.fontSize=(26+Math.random()*20)+'px';
-      b.appendChild(e);layer.appendChild(b);
-      var dur=22000+Math.random()*8000;
-      var delay=Math.random()*2500;
-      var baseY=H*(0.08+Math.random()*0.6);
-      var wanderA=26+Math.random()*46;
-      var wanderF=2+Math.random()*2.5;
-      var wanderP=Math.random()*6.283;
-      var burstP=Math.random()*6.283;
-      var flapP=Math.random()*6.283;
-      var t0=null;
-      function frame(ts){
-        if(t0===null)t0=ts;
-        var t=ts-t0-delay;
-        if(t<0){requestAnimationFrame(frame);return;}
-        var p=t/dur;
-        if(p>=1){b.remove();return;}
-        var x=-70+p*(W+140);
-        var burst=0.5+0.5*Math.sin(t*0.0011+burstP);
-        var flapping=burst>0.38;
-        if(flapping)flapP+=0.55;else flapP+=0.06;
-        var bob=flapping?-Math.abs(Math.sin(flapP))*7:Math.sin(flapP)*1.5;
-        var y=baseY+Math.sin(p*wanderF*3.14+wanderP)*wanderA+Math.sin(p*22+wanderP)*7+bob;
-        var slope=Math.cos(p*wanderF*3.14+wanderP)*wanderA*0.35;
-        var rot=Math.max(-26,Math.min(26,slope));
-        var sx=flapping?(0.45+0.55*Math.abs(Math.sin(flapP))):(0.92+0.08*Math.sin(flapP));
-        b.style.opacity=Math.min(1,p*7,(1-p)*7);
-        b.style.transform='translate('+x+'px,'+y+'px) rotate('+rot+'deg)';
-        e.style.transform='scaleX('+sx+')';
-        requestAnimationFrame(frame);
-      }
-      requestAnimationFrame(frame);
-    })();
-  }
-}
-
 /* Candle */
 function toggleCandle(){
   var c=document.getElementById('candle');
@@ -663,19 +610,14 @@ function toggleWell(){
   msg.textContent=on?'There you are. That is who the wish is for. Now wish well.':'The well is dark again. The wish stays.';
 }
 
-/* Final coffee. Guarded: repeated taps used to stack a fresh set of
-   30-second butterfly animation loops every time, which bogged the
-   page down until it felt frozen. */
-var yesSaid=false;
+/* Final coffee. The confirmation replaces the question and the
+   buttons inside the same standard page height, so the page never
+   grows taller than the other pages. */
 function sayYes(){
-  document.getElementById('coffeeYes').classList.add('show');
-  showToast('WhatsApp it is');
-  if(!yesSaid){yesSaid=true;releaseButterflies();}
-  /* The confirmation adds height the fixed page box does not have, so
-     it used to slide under the nav bar and look stuck. Grow the book
-     to fit this page first, then scroll the confirmation into view. */
-  fitBook();
-  document.getElementById('coffeeYes').scrollIntoView({behavior:'smooth',block:'center'});
+  var yes=document.getElementById('coffeeYes');
+  yes.classList.add('show');
+  var sec=yes.closest('section');
+  if(sec)sec.classList.add('answered');
 }
 
 /* Storybook, one page at a time, elements reveal in sequence */
@@ -726,21 +668,6 @@ function fitBook(){
   ref.style.display='block';ref.style.visibility='hidden';ref.style.height='auto';
   var h=ref.offsetHeight;
   ref.style.display='';ref.style.visibility='';ref.style.height='';
-  /* Exception: once she has tapped Yes on the last page, the
-     confirmation block makes that page taller than the reference.
-     Size the book to the last page instead, so the confirmation,
-     "Made for Disha." and "The End" all sit inside the card, above
-     the Previous / dots / Next bar. */
-  var cy=document.getElementById('coffeeYes');
-  if(cy&&cy.classList.contains('show')){
-    var last=bookPages[bookPages.length-1];
-    if(last&&last.contains(cy)){
-      last.style.display='block';last.style.visibility='hidden';last.style.height='auto';
-      var lh=last.offsetHeight;
-      last.style.display='';last.style.visibility='';last.style.height='';
-      if(lh>h)h=lh;
-    }
-  }
   if(h){bp.style.height=h+'px';bp.style.minHeight=h+'px';}
 }
 fitBook();
