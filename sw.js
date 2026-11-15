@@ -1,4 +1,4 @@
-const CACHE = 'for-disha-v1';
+const CACHE = 'for-disha-v2';
 const ASSETS = [
   '/',
  '/index.html',
