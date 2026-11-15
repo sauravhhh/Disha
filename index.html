@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>For Disha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFF8F1; --surface:#FFFFFF; --surface2:#FFF1E3; --ink:#2B1D16; --muted:#7A5F52; --line:#F0DDCE;
+    --accent:#C75B39; --accent2:#E9A87A; --accent-soft:#FDE8D8; --gold:#B7792B; --night:#1E1B2E; --chip:#FFF;
+    --radius:20px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#1C1410; --surface:#2A1E18; --surface2:#33241B; --ink:#FFF3E8; --muted:#D8B9A6; --line:#4A3428; --accent:#F08A5D; --accent2:#E9A87A; --accent-soft:#3D2A1E; --chip:#2A1E18; }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  button,input,textarea{font:inherit}
+  button{min-height:44px}
+  a{color:var(--accent)}
+  .wrap{max-width:680px;margin:0 auto;padding:0 20px 56px}
+  /* Hero */
+  .hero{padding:44px 0 10px;text-align:center}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);color:var(--accent);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border-radius:999px;border:1px solid var(--line)}
+  .pill i{width:7px;height:7px;background:var(--accent);border-radius:50%;display:block}
+  h1{font-family:"DM Serif Display",serif;font-weight:400;font-size:clamp(52px,13vw,84px);line-height:.95;margin:22px 0 8px;letter-spacing:-.02em}
+  h1 em{color:var(--accent);font-style:italic}
+  .hero p.lede{font-size:19px;line-height:1.5;color:var(--muted);max-width:520px;margin:14px auto 0}
+  .hero p.lede strong{color:var(--ink);font-weight:600}
+  .meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:22px 0 6px}
+  .meta span{background:var(--surface);border:1px solid var(--line);padding:8px 13px;border-radius:999px;font-size:13.5px;font-weight:500}
+  .scroll-hint{margin:28px auto 0;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);background:var(--surface);text-decoration:none;font-size:20px}
+  /* Sections */
+  section{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:26px 22px;overflow:hidden}
+  section.plain{background:transparent;border:none;padding:10px 2px 0}
+  .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent);margin:0 0 8px}
+  h2{font-family:"DM Serif Display",serif;font-weight:400;font-size:32px;line-height:1.05;margin:0 0 10px}
+  h2 em{color:var(--accent)}
+  .sub{color:var(--muted);margin:0 0 18px;font-size:15.5px}
+  .quote{font-family:"DM Serif Display",serif;font-size:21px;line-height:1.35;font-style:italic;border-left:3px solid var(--accent2);padding-left:16px;margin:18px 0}
+  /* Music */
+  .song-row{display:flex;gap:10px;flex-wrap:wrap}
+  .song-row input{flex:1;min-width:200px;padding:14px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);min-height:50px;outline:none}
+  .song-row input:focus{border-color:var(--accent)}
+  .btn{background:var(--ink);color:var(--bg);border:none;padding:0 20px;border-radius:14px;font-weight:600;cursor:pointer;min-height:50px}
+  .btn-accent{background:var(--accent);color:#fff}
+  .btn-ghost{background:var(--surface);color:var(--ink);border:1.5px solid var(--line)}
+  .song-result{display:none;margin-top:16px;background:var(--accent-soft);border:1px dashed var(--accent2);border-radius:16px;padding:16px}
+  .song-result.show{display:block}
+  .song-result b{font-family:"DM Serif Display",serif;font-size:20px;font-weight:400}
+  .vinyl{display:flex;gap:14px;align-items:center}
+  .disc{width:52px;height:52px;border-radius:50%;background:var(--ink);display:grid;place-items:center;flex-shrink:0;animation:spin 6s linear infinite}
+  .disc::after{content:"";width:16px;height:16px;border-radius:50%;background:var(--accent)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion: reduce){.disc{animation:none}}
+  /* Conversation cards */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:520px){.grid{grid-template-columns:1fr}}
+  .qcard{border:1.5px solid var(--line);background:var(--bg);border-radius:16px;padding:16px;text-align:left;cursor:pointer;min-height:110px;width:100%}
+  .qcard small{letter-spacing:.1em;text-transform:uppercase;font-size:11px;font-weight:700;color:var(--accent)}
+  .qcard p{margin:8px 0 0;font-weight:600;line-height:1.4;font-size:15px;color:var(--ink)}
+  .qcard .hint{font-weight:400;color:var(--muted);font-size:13px}
+  .qcard.revealed{background:var(--ink);border-color:var(--ink)}
+  .qcard.revealed p,.qcard.revealed small{color:#FFF3E8}
+  .qcard.revealed .hint{color:#E9CFC0}
+  /* Chips / choices */
+  .chips{display:flex;flex-wrap:wrap;gap:9px}
+  .chip{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);padding:10px 15px;border-radius:999px;cursor:pointer;font-weight:500;min-height:44px}
+  .chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .note{display:none;margin-top:14px;background:var(--surface2);border-radius:14px;padding:14px 16px;font-size:15px}
+  .note.show{display:block}
+  /* Poetry */
+  .poem{background:var(--surface2);border-radius:16px;padding:20px;text-align:center}
+  .poem p{font-family:"DM Serif Display",serif;font-size:19px;line-height:1.6;margin:0;font-style:italic}
+  .poem .more{display:none;margin-top:10px}
+  .poem.open .more{display:block}
+  .center{text-align:center}
+  /* Writing */
+  textarea{width:100%;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:14px;padding:14px;min-height:96px;resize:vertical;outline:none}
+  textarea:focus{border-color:var(--accent)}
+  /* Night drive */
+  .night{background:var(--night)!important;color:#EDE9FF;border-color:#2E2A4A}
+  .night h2,.night .sub{color:#EDE9FF}.night .sub{opacity:.75}.night .kicker{color:#FFB38A}
+  .road{height:92px;border-radius:14px;background:linear-gradient(180deg,#17142A 0 55%,#2A2438 55%);position:relative;overflow:hidden;margin:16px 0}
+  .road::after{content:"";position:absolute;left:0;right:0;top:72%;border-top:3px dashed #FFD88A;opacity:.0;transition:.4s}
+  .night.lit .road::after{opacity:.9}
+  .moon{position:absolute;top:12px;right:16px;width:26px;height:26px;border-radius:50%;background:#FFE9A8;box-shadow:0 0 24px #FFE9A8}
+  .car{position:absolute;bottom:14px;left:16px;font-size:28px;filter:grayscale(.2)}
+  /* Coffee */
+  .coffee{text-align:center;background:linear-gradient(180deg,var(--surface),var(--surface2))}
+  .coffee-art{font-size:44px;line-height:1;margin-bottom:8px}
+  .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+  .actions button{padding:0 22px;border-radius:999px}
+  .coffee-yes{display:none;margin-top:18px}
+  .coffee-yes.show{display:block}
+  .hand{font-family:"Caveat",cursive;font-size:28px;color:var(--accent)}
+  /* Details strip */
+  .details{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:520px){.details{grid-template-columns:1fr}}
+  .detail{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+  .detail b{display:block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .detail span{font-weight:600}
+  footer{text-align:center;padding:34px 10px 0;color:var(--muted)}
+  footer .sig{font-family:"Caveat",cursive;font-size:36px;color:var(--ink);line-height:1}
+  .toast{position:fixed;left:50%;transform:translateX(-50%) translateY(20px);bottom:20px;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:999px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:20;white-space:nowrap}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="pill"><i></i> A little surprise · Guwahati</span>
+    <h1>For <em>Disha</em></h1>
+    <p class="lede">You said <strong>skip the small talk</strong> — so I skipped the small website too, and made you a proper one.</p>
+    <div class="meta">
+      <span>♋ Cancer</span><span>🎓 Masters</span><span>📍 Guwahati</span><span>💬 Better in person</span><span>🕰️ Fashionably late</span>
+    </div>
+    <a class="scroll-hint" href="#music" aria-label="Scroll down">↓</a>
+  </header>
+
+  <section class="plain">
+    <p class="quote">“Just looking for someone to share good music, and deep conversations with.”</p>
+    <p class="sub" style="margin:0">That line did it. Social butterfly, never boring, and a standing threat of a midnight drive — honestly, that’s a pretty good bio. So here’s my reply, one interest at a time.</p>
+  </section>
+
+  <!-- MUSIC -->
+  <section id="music">
+    <p class="kicker">01 · Good music</p>
+    <h2>Tell me your favourite song <em>right now</em></h2>
+    <p class="sub">Your one condition. No small talk until this is answered.</p>
+    <div class="song-row">
+      <input id="songInput" type="text" placeholder="Type a song — any song" aria-label="Your favourite song right now" />
+      <button class="btn btn-accent" onclick="revealSong()">That’s the one →</button>
+    </div>
+    <div class="song-result" id="songResult">
+      <div class="vinyl"><div class="disc"></div><div><b id="songName"></b><br><span style="color:var(--muted)">Okay, good taste. Now we’re officially past small talk — your turn to ask me mine back.</span></div></div>
+    </div>
+    <p style="font-size:13.5px;color:var(--muted);margin:14px 0 0">Mine changes with old songs and quiet evenings — ask me over coffee and I’ll play you the current one.</p>
+  </section>
+
+  <!-- DEEP CONVERSATIONS -->
+  <section>
+    <p class="kicker">02 · Deep conversations</p>
+    <h2>Tap one. <em>No small talk.</em></h2>
+    <p class="sub">Pick a card, answer honestly. That’s the whole game.</p>
+    <div class="grid">
+      <button class="qcard" onclick="flip(this)"><small>Tap to reveal</small><p>What’s a song that feels like a memory?</p><p class="hint">Tap again to hide</p></button>
+      <button class="qcard" onclick="flip(this)"><small>Tap to reveal</small><p>What’s something you believe that most people don’t?</p><p class="hint">Tap again to hide</p></button>
+      <button class="qcard" onclick="flip(this)"><small>Tap to reveal</small><p>If tonight had no plans, where would you actually want to be?</p><p class="hint">Tap again to hide</p></button>
+      <button class="qcard" onclick="flip(this)"><small>Tap to reveal</small><p>What’s a small moment that made you unexpectedly happy recently?</p><p class="hint">Tap again to hide</p></button>
+    </div>
+  </section>
+
+  <!-- TRAVEL -->
+  <section>
+    <p class="kicker">03 · Travel</p>
+    <h2>Social butterfly, <em>passport ready?</em></h2>
+    <p class="sub">You love to travel, socialise, and dress up for it. Pick a vibe — I’ll match it.</p>
+    <div class="chips" data-group>
+      <button class="chip" onclick="pick(this,'Hills, slow mornings, and a long drive with good music. I’m in.')">⛰️ Hills &amp; slow mornings</button>
+      <button class="chip" onclick="pick(this,'City lights, cafés, people-watching and dressing up a little. Classic Disha, apparently.')">✨ City lights &amp; cafés</button>
+      <button class="chip" onclick="pick(this,'Somewhere by the water, no itinerary, just time together. Your favourite love style, noted.')">🌊 Somewhere by the water</button>
+      <button class="chip" onclick="pick(this,'A road trip with no fixed plan — very on-brand for someone who arrives fashionably late.')">🚗 Spontaneous road trip</button>
+    </div>
+    <div class="note" id="travelNote"></div>
+  </section>
+
+  <!-- NETFLIX -->
+  <section>
+    <p class="kicker">04 · Netflix</p>
+    <h2>For the <em>staying-in</em> nights</h2>
+    <p class="sub">Not every night is a going-out night. What are we watching?</p>
+    <div class="chips">
+      <button class="chip" onclick="pickSingle(this,'A thriller with a twist at the end — the kind you keep thinking about the next day.')">🔪 Thriller with a twist</button>
+      <button class="chip" onclick="pickSingle(this,'Something light and funny, where nobody has to think too hard.')">😂 Easy comedy</button>
+      <button class="chip" onclick="pickSingle(this,'A slow, beautiful drama — tissues optional, conversation after is not.')">🎬 Slow drama</button>
+      <button class="chip" onclick="pickSingle(this,'You pick. I’ll bring the snacks and pretend I’m not invested, then get fully invested.')">🍿 You pick, I’ll watch</button>
+    </div>
+    <div class="note" id="netflixNote"></div>
+  </section>
+
+  <!-- POETRY -->
+  <section>
+    <p class="kicker">05 · Poetry</p>
+    <h2>A few lines, <em>for the poet in you</em></h2>
+    <div class="poem" id="poem">
+      <p>Some people you meet in passing,<br>some you meet and the evening<br>refuses to end on time.</p>
+      <p class="more">You were the second kind —<br>fashionably late to my ordinary day,<br>and somehow, right on time.</p>
+    </div>
+    <div class="center" style="margin-top:14px"><button class="btn btn-ghost" onclick="togglePoem(this)">Read the rest ↓</button></div>
+  </section>
+
+  <!-- WINE / WEEKENDS -->
+  <section>
+    <p class="kicker">06 · Wine &amp; weekends</p>
+    <h2>Social, <em>on weekends</em></h2>
+    <p class="sub">Drinks socially on weekends, loves socialising, dresses up, arrives fashionably late. Noted — I’ll keep the plan light and the timing flexible.</p>
+    <div class="chips">
+      <button class="chip" onclick="toast('Cheers to that 🥂 — weekends only, obviously.')">🥂 Raise a weekend toast</button>
+      <button class="chip" onclick="toast('No rush. I’ll be the one who’s on time for both of us.')">🕰️ I’ll wait — fashionably</button>
+    </div>
+  </section>
+
+  <!-- WRITING -->
+  <section>
+    <p class="kicker">07 · Writing</p>
+    <h2>Your turn to <em>write something</em></h2>
+    <p class="sub">You write, so here’s a blank page. One line is enough — a thought, a lyric, anything.</p>
+    <textarea id="writeBox" placeholder="Start with one honest line…"></textarea>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" onclick="saveLine()">Keep this line</button>
+      <span id="writeMsg" style="align-self:center;color:var(--muted);font-size:14px"></span>
+    </div>
+  </section>
+
+  <!-- MIDNIGHT DRIVE -->
+  <section class="night" id="nightCard">
+    <p class="kicker">08 · The “con”</p>
+    <h2>Might convince you to go on a <em style="color:#FFB38A">midnight drive</em></h2>
+    <p class="sub">You listed it as a con. It isn’t one.</p>
+    <div class="road"><div class="moon"></div><div class="car">🚗</div></div>
+    <button class="btn btn-accent" onclick="toggleLights(this)">Turn on the headlights</button>
+    <span id="driveMsg" style="margin-left:10px;font-size:14px;opacity:.8"></span>
+  </section>
+
+  <!-- SMALL DETAILS -->
+  <section class="plain">
+    <p class="kicker">The small print</p>
+    <h2 style="margin-bottom:14px">Things I <em>noticed</em></h2>
+    <div class="details">
+      <div class="detail"><b>Love style</b><span>Time together — quality over grand gestures</span></div>
+      <div class="detail"><b>Pets</b><span>Don’t have any, but love them 🐾</span></div>
+      <div class="detail"><b>Green flag</b><span>“I don’t have a male best friend” — noted, and appreciated 😄</span></div>
+      <div class="detail"><b>Going out</b><span>Socialising, dressing up, arriving fashionably late</span></div>
+    </div>
+  </section>
+
+  <!-- COFFEE -->
+  <section class="coffee">
+    <div class="coffee-art">☕</div>
+    <p class="kicker">Finally · Coffee</p>
+    <h2>Let’s grab a coffee<br>and <em>see if we vibe</em></h2>
+    <p class="sub" style="max-width:440px;margin-left:auto;margin-right:auto">Your words, not mine. Somewhere in Guwahati, no rush, good music on the way there. Better in person — you said so yourself.</p>
+    <div class="actions">
+      <button class="btn btn-accent" onclick="sayYes()">Yes, let’s do it</button>
+      <button class="btn btn-ghost" onclick="toast('Fair. The offer stays open — no expiry date.')">Maybe later</button>
+    </div>
+    <div class="coffee-yes" id="coffeeYes">
+      <p class="hand">Perfect. You pick the place, I’ll be on time —<br>you can be fashionably late.</p>
+      <p style="color:var(--muted);font-size:14px;margin:6px 0 0">Tell Saurabh on Tinder and fix a day. That’s all you have to do.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p style="margin:0 0 6px">Made for Disha, with no small talk involved.</p>
+    <p class="sig">— Saurabh</p>
+    <p style="font-size:13px;margin-top:10px">Guwahati · For a social butterfly who loves music, poetry &amp; midnight drives</p>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show')},2600);}
+function toast(m){showToast(m);}
+function revealSong(){var v=document.getElementById('songInput').value.trim();if(!v){showToast('Type a song first — that was the deal');document.getElementById('songInput').focus();return;}document.getElementById('songName').textContent='“'+v+'”';document.getElementById('songResult').classList.add('show');}
+document.getElementById('songInput').addEventListener('keydown',function(e){if(e.key==='Enter')revealSong();});
+function flip(el){el.classList.toggle('revealed');}
+function pick(btn,msg){var parent=btn.parentElement;parent.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');var n=document.getElementById('travelNote');n.textContent=msg;n.classList.add('show');}
+function pickSingle(btn,msg){var parent=btn.parentElement;parent.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');var n=document.getElementById('netflixNote');n.textContent=msg;n.classList.add('show');}
+function togglePoem(btn){var p=document.getElementById('poem');var open=p.classList.toggle('open');btn.textContent=open?'Hide it ↑':'Read the rest ↓';}
+function saveLine(){var v=document.getElementById('writeBox').value.trim();var m=document.getElementById('writeMsg');if(!v){m.textContent='One line — that’s all it takes.';return;}m.textContent='Kept. Now that deserves to be shared back.';showToast('Line kept — send it to Saurabh');}
+function toggleLights(btn){var c=document.getElementById('nightCard');var lit=c.classList.toggle('lit');btn.textContent=lit?'Headlights on — let’s go':'Turn on the headlights';document.getElementById('driveMsg').textContent=lit?'Playlist on, windows down, Guwahati at midnight.':' ';if(lit)showToast('Midnight drive: approved ✅');}
+function sayYes(){document.getElementById('coffeeYes').classList.add('show');showToast('Coffee: confirmed ☕');document.getElementById('coffeeYes').scrollIntoView({behavior:'smooth',block:'center'});}
+</script>
+</body>
+</html>
