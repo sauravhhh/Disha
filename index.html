@@ -287,6 +287,10 @@
     </button>
     </div>
     <p class="center rv" style="--i:4;color:var(--muted);font-size:14px;margin:8px 0 18px" id="candleMsg">Unlit, for now.</p>
+    <div style="text-align:center;display:none" id="blowWrap">
+      <button class="btn btn-ghost" id="blowBtn" onclick="startBlow()">Blow it out</button>
+      <p style="color:var(--muted);font-size:14px;margin:10px 0 0;min-height:20px" id="blowMsg"></p>
+    </div>
   </section>
 
   <!-- WISHING WELL -->
@@ -554,6 +558,77 @@ function toggleCandle(){
   var lit=c.classList.toggle('lit');
   c.setAttribute('aria-pressed',lit?'true':'false');
   document.getElementById('candleMsg').textContent=lit?'Lit. Now make the wish, quietly.':'Unlit, for now.';
+  if(!lit)stopBlow();
+  var m=document.getElementById('blowMsg');if(m)m.textContent='';
+  updateBlowUI();
+}
+
+/* Blow the candle out with the microphone. Tapping "Blow it out"
+   asks for mic permission, then listens with the Web Audio API.
+   A blow is a loud rush of air: when the level stays above a clear
+   threshold for a few frames in a row, the flame goes out and the
+   microphone stops. If permission is denied, a quiet note says so
+   and the candle stays lit. */
+var blowCtx=null,blowStream=null,blowRAF=null,blowActive=false;
+function updateBlowUI(){
+  var c=document.getElementById('candle');
+  var wrap=document.getElementById('blowWrap');
+  if(wrap)wrap.style.display=(c&&c.classList.contains('lit'))?'block':'none';
+  if(typeof fitBook==='function')fitBook();
+}
+function stopBlow(){
+  blowActive=false;
+  if(blowRAF)cancelAnimationFrame(blowRAF);
+  blowRAF=null;
+  if(blowStream){blowStream.getTracks().forEach(function(t){t.stop();});blowStream=null;}
+  if(blowCtx){try{var p=blowCtx.close();if(p&&p.catch)p.catch(function(){});}catch(e){}blowCtx=null;}
+  var b=document.getElementById('blowBtn');
+  if(b){b.disabled=false;b.textContent='Blow it out';}
+}
+function blowOutCandle(){
+  stopBlow();
+  var c=document.getElementById('candle');
+  if(c){c.classList.remove('lit');c.setAttribute('aria-pressed','false');}
+  document.getElementById('candleMsg').textContent='Blown out. The wish is on its way.';
+  var m=document.getElementById('blowMsg');if(m)m.textContent='';
+  updateBlowUI();
+}
+function startBlow(){
+  if(blowActive)return;
+  var msg=document.getElementById('blowMsg');
+  var btn=document.getElementById('blowBtn');
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    if(msg)msg.textContent='This browser can’t use the microphone. The candle stays lit.';
+    return;
+  }
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    blowStream=stream;
+    var AC=window.AudioContext||window.webkitAudioContext;
+    blowCtx=new AC();
+    if(blowCtx.state==='suspended')blowCtx.resume();
+    var src=blowCtx.createMediaStreamSource(stream);
+    var an=blowCtx.createAnalyser();
+    an.fftSize=2048;
+    src.connect(an);
+    var data=new Uint8Array(an.fftSize);
+    blowActive=true;
+    if(btn){btn.disabled=true;btn.textContent='Listening…';}
+    if(msg)msg.textContent='Listening. Blow into the microphone.';
+    var hot=0;
+    function tick(){
+      if(!blowActive)return;
+      an.getByteTimeDomainData(data);
+      var sum=0;
+      for(var i=0;i<data.length;i++){var v=(data[i]-128)/128;sum+=v*v;}
+      var rms=Math.sqrt(sum/data.length);
+      if(rms>0.30)hot++;else hot=0;
+      if(hot>=4){blowOutCandle();return;}
+      blowRAF=requestAnimationFrame(tick);
+    }
+    tick();
+  }).catch(function(){
+    if(msg)msg.textContent='No microphone, that’s alright. The candle stays lit.';
+  });
 }
 
 /* Wishing well, black until tapped, then her picture appears.
@@ -628,6 +703,7 @@ function goToPage(n,dir){
   var well=document.getElementById('well');
   if(well&&well.classList.contains('on')&&!bookPages[n].contains(well))toggleWell();
   if(songPlaying&&!bookPages[n].contains(document.getElementById('songPlayer')))stopSong();
+  if(blowActive&&!bookPages[n].contains(document.getElementById('candle')))stopBlow();
   curPage=n;
   document.getElementById('book').setAttribute('data-dir',dir<0?'l':'r');
   renderBook();
