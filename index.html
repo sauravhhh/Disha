@@ -565,7 +565,7 @@ function startWellSong(){
   var wrap=document.getElementById('wellPlayer');
   if(!wrap)return;
   var f=document.createElement('iframe');
-  f.src='https://www.youtube.com/embed/qn3WEdLtp-g?autoplay=1&loop=1&playlist=qn3WEdLtp-g&start=10&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0';
+  f.src='https://www.youtube.com/embed/qn3WEdLtp-g?autoplay=1&loop=1&playlist=qn3WEdLtp-g&start=16&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0';
   f.width='1';f.height='1';
   f.setAttribute('allow','autoplay; encrypted-media');
   f.setAttribute('aria-hidden','true');
@@ -596,6 +596,10 @@ function sayYes(){
   document.getElementById('coffeeYes').classList.add('show');
   showToast('WhatsApp it is');
   if(!yesSaid){yesSaid=true;releaseButterflies();}
+  /* The confirmation adds height the fixed page box does not have, so
+     it used to slide under the nav bar and look stuck. Grow the book
+     to fit this page first, then scroll the confirmation into view. */
+  fitBook();
   document.getElementById('coffeeYes').scrollIntoView({behavior:'smooth',block:'center'});
 }
 
@@ -646,6 +650,21 @@ function fitBook(){
   ref.style.display='block';ref.style.visibility='hidden';ref.style.height='auto';
   var h=ref.offsetHeight;
   ref.style.display='';ref.style.visibility='';ref.style.height='';
+  /* Exception: once she has tapped Yes on the last page, the
+     confirmation block makes that page taller than the reference.
+     Size the book to the last page instead, so the confirmation,
+     "Made for Disha." and "The End" all sit inside the card, above
+     the Previous / dots / Next bar. */
+  var cy=document.getElementById('coffeeYes');
+  if(cy&&cy.classList.contains('show')){
+    var last=bookPages[bookPages.length-1];
+    if(last&&last.contains(cy)){
+      last.style.display='block';last.style.visibility='hidden';last.style.height='auto';
+      var lh=last.offsetHeight;
+      last.style.display='';last.style.visibility='';last.style.height='';
+      if(lh>h)h=lh;
+    }
+  }
   if(h){bp.style.height=h+'px';bp.style.minHeight=h+'px';}
 }
 fitBook();
