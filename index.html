@@ -36,7 +36,7 @@
   .stage.show{display:block;animation:fadein .5s ease}
   @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   @media (prefers-reduced-motion: reduce){.stage.show{animation:none}.intro{transition:none}}
-  /* Gift box — deep charcoal, brass ribbon, no cartoon colours */
+  /* Gift box, deep charcoal, brass ribbon, no cartoon colours */
   .gift{position:relative;width:168px;height:172px;margin:26px auto 8px;background:none;border:none;cursor:pointer;display:block;padding:0}
   .gift-body{position:absolute;left:14px;right:14px;top:74px;bottom:8px;background:#26261F;border-radius:3px}
   .gift-body::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:20px;transform:translateX(-50%);background:var(--accent)}
@@ -47,10 +47,10 @@
   .bow-r{left:50%;transform:rotate(24deg)}
   .gift.open .gift-lid{transform:translate(-14px,-52px) rotate(-12deg);opacity:.92}
   .gift-hint{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:18px}
-  /* Confetti — brass and ink tones, burst when the box opens */
+  /* Confetti, brass and ink tones, burst when the box opens */
   .confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:90;overflow:hidden}
   .confetti{position:absolute;left:0;top:0;display:block;will-change:transform,opacity}
-  /* Yes / No arena — Yes stays, No moves */
+  /* Yes / No arena, Yes stays, No moves */
   .arena{position:relative;height:168px;margin-top:8px}
   .arena .btn{position:absolute;top:56px;width:124px;min-height:52px}
   .arena .yes-btn{left:calc(50% - 140px)}
@@ -121,7 +121,7 @@
   .night.lit .road::after{opacity:.85}
   .moon{position:absolute;top:12px;right:16px;width:24px;height:24px;border-radius:50%;background:#EFE3BC;box-shadow:0 0 22px rgba(239,227,188,.55)}
   .car-line{position:absolute;bottom:16px;left:18px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#9AA1B5}
-  /* Manifestation — candle & wish */
+  /* Manifestation, candle & wish */
   .candle{display:block;position:relative;width:96px;height:196px;margin:6px auto 0;background:none;border:none;cursor:pointer;padding:0}
   .candle .flame{position:absolute;top:2px;left:50%;width:22px;height:34px;margin-left:-11px;background:radial-gradient(circle at 50% 78%,#FFF3C4 0 22%,#EFC65E 45%,#C98F2D 78%);border-radius:50% 50% 50% 50%/62% 62% 38% 38%;opacity:0;transform:scale(.35);transform-origin:50% 100%;transition:opacity .35s ease,transform .35s ease}
   .candle .wick{position:absolute;top:38px;left:50%;width:3px;height:13px;margin-left:-1.5px;background:#3A3125;border-radius:2px}
@@ -135,8 +135,8 @@
   .wish-fly.fly{animation:rise 2.8s ease forwards}
   @keyframes rise{0%{opacity:0;transform:translateY(12px)}15%{opacity:1}100%{opacity:0;transform:translateY(-52px)}}
   @media (prefers-reduced-motion: reduce){.wish-fly.fly{animation-duration:.1s}}
-  /* Wishing well — black until tapped, then her picture */
-  .well{display:block;position:relative;width:232px;height:232px;max-width:78vw;aspect-ratio:1;margin:4px auto 0;border-radius:50%;background:radial-gradient(circle at 50% 38%,#111116,#030304 72%);border:12px solid #33322B;box-shadow:0 0 0 2px var(--accent),inset 0 0 64px #000;overflow:hidden;cursor:pointer;padding:0}
+  /* Wishing well, black until tapped, then her picture */
+  .well{display:block;position:relative;width:196px;height:196px;max-width:68vw;aspect-ratio:1;margin:4px auto 0;border-radius:50%;background:radial-gradient(circle at 50% 38%,#111116,#030304 72%);border:12px solid #33322B;box-shadow:0 0 0 2px var(--accent),inset 0 0 64px #000;overflow:hidden;cursor:pointer;padding:0}
   .well img{width:100%;height:100%;object-fit:cover;object-position:center 30%;border-radius:50%;display:none}
   .well.on img{display:block}
   .well .well-shine{position:absolute;top:12%;left:16%;width:44%;height:20%;border-radius:50%;background:rgba(255,255,255,.07);transform:rotate(-18deg);pointer-events:none}
@@ -145,32 +145,36 @@
   .bfly-layer{position:fixed;inset:0;pointer-events:none;z-index:80;overflow:hidden}
   .bfly{position:absolute;left:0;top:0;display:block;line-height:1;will-change:transform,opacity}
   .bfly .emoji{display:block;line-height:1;will-change:transform;filter:drop-shadow(0 3px 5px rgba(0,0,0,.18))}
-  /* Song page — the record is the player */
-  .song-page{text-align:center}
-  .record-stage{position:relative;width:248px;height:248px;max-width:78vw;aspect-ratio:1;margin:8px auto 4px}
+  /* Song page, the record is the player — compacted to fit the normal (candle) page height */
+  .song-page{text-align:center;padding-top:26px;padding-bottom:20px}
+  .song-page .sub{margin-bottom:10px}
+  .song-page h2{margin-bottom:6px}
+  .record-stage{position:relative;width:172px;height:172px;max-width:62vw;aspect-ratio:1;margin:2px auto 0}
   .record{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;border:none;cursor:pointer;padding:0;background:repeating-radial-gradient(circle at center,#171713 0 2px,#24241D 2px 4px);box-shadow:0 18px 36px rgba(23,23,19,.28),inset 0 0 0 1px rgba(255,255,255,.07);display:grid;place-items:center}
   .record::after{content:"";position:absolute;top:11%;left:14%;width:42%;height:18%;border-radius:50%;background:rgba(255,255,255,.08);transform:rotate(-18deg);pointer-events:none}
   .record.playing{animation:spin 3.4s linear infinite}
-  .record-label{width:94px;height:94px;border-radius:50%;background:var(--accent);color:#FFF8E7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:10px;position:relative;z-index:1}
-  .record-label small{font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;opacity:.9;line-height:1.2}
-  .record-label b{font-family:"DM Serif Display",serif;font-weight:400;font-size:15px;line-height:1.1}
-  .record-label i{width:12px;height:12px;border-radius:50%;background:var(--surface);display:block;margin-top:4px;box-shadow:inset 0 0 0 3px rgba(0,0,0,.18)}
-  .play-badge{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:58px;height:58px;border-radius:50%;background:var(--surface);color:var(--ink);display:grid;place-items:center;font-size:21px;box-shadow:0 8px 22px rgba(0,0,0,.28);transition:opacity .25s ease,transform .25s ease;pointer-events:none;padding-left:3px}
+  .record-label{width:66px;height:66px;border-radius:50%;background:var(--accent);color:#FFF8E7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:6px;position:relative;z-index:1}
+  .record-label small{font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.9;line-height:1.2}
+  .record-label b{font-family:"DM Serif Display",serif;font-weight:400;font-size:12.5px;line-height:1.1}
+  .record-label i{width:10px;height:10px;border-radius:50%;background:var(--surface);display:block;margin-top:2px;box-shadow:inset 0 0 0 3px rgba(0,0,0,.18)}
+  .play-badge{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:46px;height:46px;border-radius:50%;background:var(--surface);color:var(--ink);display:grid;place-items:center;font-size:17px;box-shadow:0 8px 22px rgba(0,0,0,.28);transition:opacity .25s ease,transform .25s ease;pointer-events:none;padding-left:3px}
   .record-stage.playing .play-badge{opacity:0;transform:translate(-50%,-50%) scale(.7)}
-  .tonearm{position:absolute;top:-4px;right:2px;width:118px;height:14px;z-index:4;pointer-events:none;transform-origin:104px 7px;transform:rotate(-8deg);transition:transform .7s ease}
-  .tonearm::before{content:"";position:absolute;right:0;top:0;width:28px;height:28px;border-radius:50%;background:var(--ink);box-shadow:0 3px 8px rgba(0,0,0,.25)}
-  .tonearm::after{content:"";position:absolute;right:24px;top:11px;width:88px;height:5px;border-radius:3px;background:var(--accent);transform:rotate(8deg);transform-origin:right center}
+  .tonearm{position:absolute;top:-4px;right:2px;width:84px;height:12px;z-index:4;pointer-events:none;transform-origin:74px 6px;transform:rotate(-8deg);transition:transform .7s ease}
+  .tonearm::before{content:"";position:absolute;right:0;top:0;width:22px;height:22px;border-radius:50%;background:var(--ink);box-shadow:0 3px 8px rgba(0,0,0,.25)}
+  .tonearm::after{content:"";position:absolute;right:19px;top:9px;width:62px;height:4px;border-radius:3px;background:var(--accent);transform:rotate(8deg);transform-origin:right center}
   .record-stage.playing .tonearm{transform:rotate(22deg)}
   .mus-note{position:absolute;z-index:2;font-size:20px;color:var(--accent);opacity:0;pointer-events:none}
   .record-stage.playing .mus-note{animation:floatNote 3s ease-in infinite}
-  .mus-note.n1{left:6px;top:52px}.mus-note.n2{right:8px;top:84px;animation-delay:1s!important;font-size:16px}.mus-note.n3{left:22px;bottom:28px;animation-delay:2s!important;font-size:24px}
+  .mus-note.n1{left:2px;top:34px}.mus-note.n2{right:4px;top:56px;animation-delay:1s!important;font-size:16px}.mus-note.n3{left:14px;bottom:18px;animation-delay:2s!important;font-size:24px}
   @keyframes floatNote{0%{opacity:0;transform:translateY(10px) rotate(-8deg)}25%{opacity:1}100%{opacity:0;transform:translateY(-42px) rotate(10deg)}}
-  .eq{display:flex;gap:5px;justify-content:center;align-items:flex-end;height:26px;margin:14px 0 4px}
+  .eq{display:flex;gap:5px;justify-content:center;align-items:flex-end;height:18px;margin:6px 0 2px}
   .eq i{width:5px;height:6px;border-radius:3px;background:var(--accent);opacity:.35}
   .record-stage.playing~.eq i,.song-playing .eq i{opacity:1;animation:eqBounce .7s ease-in-out infinite alternate}
   .eq i:nth-child(2){animation-delay:.12s!important}.eq i:nth-child(3){animation-delay:.24s!important}.eq i:nth-child(4){animation-delay:.06s!important}.eq i:nth-child(5){animation-delay:.3s!important}
-  @keyframes eqBounce{from{height:6px}to{height:24px}}
-  .lyric{font-family:"DM Serif Display",serif;font-style:italic;font-size:19px;line-height:1.45;color:var(--ink);margin:12px auto 4px;max-width:420px}
+  @keyframes eqBounce{from{height:6px}to{height:17px}}
+  .lyric{font-family:"DM Serif Display",serif;font-style:italic;font-size:17px;line-height:1.4;color:var(--ink);margin:6px auto 2px;max-width:420px}
+  .song-page #songMsg{margin:4px 0 2px!important}
+  .song-page #songBtn{min-height:44px;padding-top:0;padding-bottom:0}
   @media (prefers-reduced-motion: reduce){.record.playing{animation:none}.record-stage.playing .mus-note{animation:none}.song-playing .eq i{animation:none}}
   /* Coffee */
   .coffee{text-align:center}
@@ -183,8 +187,9 @@
   .book{margin-top:26px;background:var(--surface);border:1px solid var(--line);border-radius:8px 16px 16px 8px;box-shadow:0 18px 44px rgba(23,23,19,.10),inset 7px 0 14px rgba(23,23,19,.05);overflow:hidden;position:relative}
   .book-progress{height:3px;background:var(--surface2)}
   .book-progress i{display:block;height:100%;width:20%;background:var(--accent);transition:width .5s ease}
-  .book-pages{min-height:560px}
-  @media(max-width:520px){.book-pages{min-height:520px}}
+  .book-pages{min-height:0}
+  .page{height:100%}
+  .song-page{overflow:hidden}
   .page{display:none;margin:0;background:transparent;border:none;border-radius:0;padding:40px 30px 34px;overflow:visible}
   .page.active{display:block}
   .book[data-dir="r"] .page.active{animation:pageR .55s ease both}
@@ -217,7 +222,7 @@
   <div class="intro-inner">
 
     <div class="stage show" id="giftStage">
-      <p class="kicker">For Disha</p>
+      <p class="kicker">For You</p>
       <h2>Something for you.</h2>
       <p class="sub">No occasion. I came across your words, and I thought they deserved a proper reply.</p>
       <button class="gift" id="giftBox" aria-label="Open the gift box">
@@ -246,8 +251,8 @@
     <header class="hero">
       <div class="rule rv" style="--i:0"></div>
       <p class="kicker rv" style="--i:1">A short story, of sorts</p>
-      <h1 class="rv" style="--i:2">For <em>Disha</em></h1>
-      <p class="lede rv" style="--i:3">You said <strong>skip the small talk</strong>. So I did — and made you this instead. A few pages, one thing at a time.</p>
+      <h1 class="rv" style="--i:2">For <em>You</em></h1>
+      <p class="lede rv" style="--i:3">You said <strong>skip the small talk</strong>. So I did, and made you this instead. A few pages, one thing at a time.</p>
       <div class="rv" style="--i:4;margin-top:32px"><button class="btn btn-accent" onclick="nextPage()">Begin the story</button></div>
     </header>
   </section>
@@ -256,14 +261,14 @@
     <p class="kicker rv" style="--i:0">Prologue · Her words</p>
     <h2 class="rv" style="--i:1">Where it <em>began</em></h2>
     <p class="quote rv" style="--i:2">“Just looking for someone to share good music, and deep conversations with.”</p>
-    <p class="sub rv" style="--i:3;margin:0">That line stayed with me. So here is my reply — quietly, and meant.</p>
+    <p class="sub rv" style="--i:3;margin:0">That line stayed with me. So here is my reply, quietly, and meant.</p>
   </section>
 
   <!-- MANIFESTATION -->
   <section class="page" id="manifestation" aria-label="Chapter one, manifestation">
     <p class="kicker rv" style="--i:0">Chapter One · Manifestation</p>
     <h2 class="rv" style="--i:1">Light a candle. <em>Make a wish.</em></h2>
-    <p class="sub rv" style="--i:2">Tap the candle, close your eyes for a second, and make the wish quietly — some things should be done properly.</p>
+    <p class="sub rv" style="--i:2">Tap the candle, close your eyes for a second, and make the wish quietly. Some things should be done properly.</p>
     <div class="rv" style="--i:3">
     <button class="candle" id="candle" aria-pressed="false" aria-label="Tap to light the candle" onclick="toggleCandle()">
       <span class="flame"></span><span class="wick"></span><span class="wax"></span><span class="candle-base"></span>
@@ -276,7 +281,7 @@
   <section class="page" aria-label="Chapter two, the wishing well">
     <p class="kicker rv" style="--i:0">Chapter Two · The Wishing Well</p>
     <h2 class="rv" style="--i:1">Look into <em>the well</em></h2>
-    <p class="sub rv" style="--i:2">Still water, showing nothing — until you lean in. Tap the well, and see who it shows you.</p>
+    <p class="sub rv" style="--i:2">Still water, showing nothing until you lean in. Tap the well, and see who it shows you.</p>
     <p class="rv" style="--i:3;font-family:'DM Serif Display',serif;font-style:italic;font-size:22px;line-height:1.4;text-align:center;margin:4px 0 16px">Want to see an angel?</p>
     <div class="rv" style="--i:4">
     <button class="well" id="well" aria-label="Tap the wishing well to see who it shows you" onclick="toggleWell()">
@@ -287,11 +292,11 @@
     <p class="center rv" style="--i:5;color:var(--muted);font-size:14px;margin:14px 0 0" id="wellMsg">Tap the well to look in.</p>
   </section>
 
-  <!-- SONG — plays only here, only when she presses play -->
+  <!-- SONG, plays only here, only when she presses play -->
   <section class="page song-page" id="songPage" aria-label="Chapter three, a song">
     <p class="kicker rv" style="--i:0">Chapter Three · A Song</p>
     <h2 class="rv" style="--i:1">One song. <em>Your call.</em></h2>
-    <p class="sub rv" style="--i:2">Nothing plays anywhere else in this story. If you want music, it is here — press the record and it spins. Press it again and it stops.</p>
+    <p class="sub rv" style="--i:2">I saved the music for this page only. If you feel like listening, just tap the record. Tap it again when you want it to stop.</p>
     <div class="rv" style="--i:3">
       <div class="record-stage" id="recordStage">
         <span class="mus-note n1" aria-hidden="true">♪</span>
@@ -314,7 +319,7 @@
   <!-- COFFEE -->
   <section class="page coffee" aria-label="The last chapter, coffee">
     <p class="kicker rv" style="--i:0">At Last · One Question First</p>
-    <p class="rv" style="--i:1;font-size:18px;line-height:1.6;font-weight:600;margin:0 0 10px;color:var(--ink)">Coffee <em style="color:var(--accent);font-style:italic">with me?</em></p>
+    <h2 class="rv" style="--i:1">Coffee <em>with me?</em></h2>
     <p class="sub rv" style="--i:2">Good music on the way there, a conversation worth having, and no small talk. That is the whole offer.</p>
     <div class="rv" style="--i:3">
     <div class="arena" id="coffeeArena">
@@ -329,7 +334,7 @@
     </div>
     <footer class="rv" style="--i:5">
       <p style="margin:0 0 8px">Made for Disha, with no small talk involved.</p>
-      <p class="sig">— Saurabh</p>
+      <p class="sig">Saurabh</p>
       <p style="margin:12px 0 0;font-family:'DM Serif Display',serif;font-style:italic;font-size:17px;color:var(--muted)">The End</p>
     </footer>
   </section>
@@ -349,7 +354,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-/* Song — ONLY on the song page, ONLY when she presses play.
+/* Song, ONLY on the song page, ONLY when she presses play.
    No music anywhere else, nothing autoplays. Leaving the page stops it. */
 var songPlaying=false;
 function toggleSong(){
@@ -391,7 +396,7 @@ function stopSong(){
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show')},2600);}
 function toast(m){showToast(m);}
 
-/* Confetti — a burst from the gift box the moment it opens */
+/* Confetti, a burst from the gift box the moment it opens */
 function burstConfetti(cx,cy){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   var layer=document.getElementById('confettiLayer');
@@ -453,7 +458,7 @@ function startStory(){
   setTimeout(function(){document.getElementById('intro').style.display='none';},650);
 }
 
-/* The No button dodges — Yes never moves */
+/* The No button dodges, Yes never moves */
 function makeDodgy(btnId,noteId){
   var btn=document.getElementById(btnId), note=document.getElementById(noteId), tries=0;
   function dodge(e){
@@ -475,7 +480,7 @@ function makeDodgy(btnId,noteId){
 }
 makeDodgy('coffeeNo','coffeeDodgeNote');
 
-/* Butterflies — real 🦋, released whenever she says yes.
+/* Butterflies, real 🦋, released whenever she says yes.
    Flight model: wings beat in short bursts (the body bobs up with each
    burst), then a glide with wings held open; the path wanders up and
    down instead of crossing in a straight line. */
@@ -529,21 +534,21 @@ function toggleCandle(){
   var c=document.getElementById('candle');
   var lit=c.classList.toggle('lit');
   c.setAttribute('aria-pressed',lit?'true':'false');
-  document.getElementById('candleMsg').textContent=lit?'Lit. Now make the wish — quietly.':'Unlit, for now.';
+  document.getElementById('candleMsg').textContent=lit?'Lit. Now make the wish, quietly.':'Unlit, for now.';
 }
 
-/* Wishing well — black until tapped, then her picture appears */
+/* Wishing well, black until tapped, then her picture appears */
 function toggleWell(){
   var well=document.getElementById('well');
   var msg=document.getElementById('wellMsg');
   var on=well.classList.toggle('on');
-  msg.textContent=on?'There you are. That is who the wish is for — now wish well.':'The well is dark again. The wish stays.';
+  msg.textContent=on?'There you are. That is who the wish is for. Now wish well.':'The well is dark again. The wish stays.';
 }
 
 /* Final coffee */
 function sayYes(){releaseButterflies();document.getElementById('coffeeYes').classList.add('show');showToast('Coffee: confirmed');document.getElementById('coffeeYes').scrollIntoView({behavior:'smooth',block:'center'});}
 
-/* Storybook — one page at a time, elements reveal in sequence */
+/* Storybook, one page at a time, elements reveal in sequence */
 var bookPages=Array.prototype.slice.call(document.querySelectorAll('.page'));
 var curPage=0;
 var dotsWrap=document.getElementById('pageDots');
@@ -576,6 +581,27 @@ function goToPage(n,dir){
 function nextPage(){goToPage(curPage+1,1);}
 function prevPage(){goToPage(curPage-1,-1);}
 renderBook();
+/* Same white box height on every page: the candle page is the
+   reference size. Every page is fixed to the candle page's height —
+   never stretched to the tallest page. The song page is compacted
+   in CSS so its content fits inside this normal short height.
+   Re-measured on load, font load and resize. */
+function fitBook(){
+  var bp=document.querySelector('.book-pages');
+  if(!bp||!bookPages.length)return;
+  var ref=document.getElementById('manifestation');
+  if(!ref)ref=bookPages[0];
+  bp.style.height='auto';bp.style.minHeight='0px';
+  ref.style.display='block';ref.style.visibility='hidden';ref.style.height='auto';
+  var h=ref.offsetHeight;
+  ref.style.display='';ref.style.visibility='';ref.style.height='';
+  if(h){bp.style.height=h+'px';bp.style.minHeight=h+'px';}
+}
+fitBook();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitBook);
+window.addEventListener('load',fitBook);
+var fitTimer=null;
+window.addEventListener('resize',function(){clearTimeout(fitTimer);fitTimer=setTimeout(fitBook,150);});
 document.addEventListener('keydown',function(e){
   if(document.body.classList.contains('locked'))return;
   if(e.key==='ArrowRight')nextPage();
